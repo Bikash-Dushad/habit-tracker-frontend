@@ -1,54 +1,24 @@
 import { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import toast from "react-hot-toast";
 import "./Signup.css";
 import {
   UserIcon,
   EmailIcon,
   LockIcon,
   EyeIcon,
-  LogoIcon,
   GoogleIcon,
 } from "../../Helper/Icons";
-import { getPasswordScore } from "../../Helper/Helper";
-const DOTS = [true, true, true, true, true, true, true];
-
-function getStrengthColor(score) {
-  return ["", "#f87171", "#fb923c", "#facc15", "#4ade80"][score];
-}
-
-function InputField({
-  label,
-  id,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  icon,
-  error,
-  children,
-  animationDelay,
-}) {
-  return (
-    <div className="hf-field" style={{ animationDelay }}>
-      <label htmlFor={id}>{label}</label>
-      <div className="hf-input-wrap">
-        <input
-          id={id}
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={onChange}
-          className={error ? "hf-has-error" : ""}
-          autoComplete={id}
-        />
-        <span className="hf-input-icon">{icon}</span>
-        {children}
-      </div>
-      {error && <span className="hf-error-msg">{error}</span>}
-    </div>
-  );
-}
+import {
+  getPasswordScore,
+  InputField,
+  getStrengthColor,
+} from "../../Helper/Helper";
+import LoginLeftContent from "../LoginLeftContent/LoginLeftContent";
+import { postData } from "../../api/apiService";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -81,14 +51,29 @@ const Signup = () => {
     return errs;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
     }
-    setSubmitted(true);
+    try {
+      const payload = { ...form };
+      const response = await postData("api/user/signup", payload);
+
+      if (response?.responseCode === 200) {
+        setSubmitted(true);
+        toast.success(response.message);
+        setTimeout(() => {
+          navigate("/signin");
+        }, 1000);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const strengthColor = getStrengthColor(pwScore);
@@ -101,42 +86,7 @@ const Signup = () => {
 
         <div className="hf-container">
           {/* Left Panel */}
-          <div className="hf-left">
-            <div className="hf-logo">
-              <div className="hf-logo-icon">
-                <LogoIcon />
-              </div>
-              <span className="hf-logo-name">HabitForge</span>
-            </div>
-
-            <div className="hf-left-content">
-              <h1>
-                Build habits that <em>actually</em> stick.
-              </h1>
-              <p>
-                Track daily streaks, build momentum, and turn small actions into
-                lasting change.
-              </p>
-
-              <div className="hf-streak-preview">
-                <div className="hf-streak-label">Your streak preview</div>
-                <div className="hf-streak-dots">
-                  {DOTS.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`hf-dot ${i < 6 ? "filled" : "today"}`}
-                      style={{ animationDelay: `${0.1 + i * 0.05}s` }}
-                    />
-                  ))}
-                </div>
-                <div className="hf-streak-count">
-                  <span>7-day</span> streak starts today
-                </div>
-              </div>
-            </div>
-
-            <div className="hf-trusted">Trusted by 12,000+ habit builders</div>
-          </div>
+          <LoginLeftContent />
 
           {/* Right Panel */}
           <div className="hf-right">
@@ -256,7 +206,7 @@ const Signup = () => {
             </button>
 
             <p className="hf-signin-link">
-              Already have an account? <a href="#">Sign in</a>
+              Already have an account? <NavLink to="/signin">Sign in</NavLink>
             </p>
           </div>
         </div>

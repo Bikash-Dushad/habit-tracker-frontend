@@ -1,4 +1,3 @@
-import { message } from "antd";
 import axios from "axios";
 
 // Create Axios instance
@@ -13,7 +12,7 @@ const Instance = axios.create({
 // Request Interceptor (Attach Token)
 Instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("adminToken"); // Fetch token from localStorage
+    const token = localStorage.getItem("habitToken"); // Fetch token from localStorage
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -35,14 +34,13 @@ Instance.interceptors.response.use(
       switch (response.status) {
         case 400:
           console.error("Bad Request: ", response.data.message);
-          message.error(response.data.message || "Bad request");
           break;
 
         case 401:
           console.error("Unauthorized: Token expired or invalid");
           alert("Session expired. Redirecting to login...");
-          localStorage.removeItem("adminToken"); // Clear token
-          window.location.href = "/login"; // Redirect to login
+          localStorage.removeItem("habitToken"); // Clear token
+          window.location.href = "/signin"; // Redirect to login
           break;
 
         case 403:
