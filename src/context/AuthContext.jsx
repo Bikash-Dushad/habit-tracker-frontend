@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [tokenLoading, setTokenLoading] = useState(true);
+  const [totalUsers, setTotalUsers] = useState(0);
 
   useEffect(() => {
     try {
@@ -20,7 +21,6 @@ export const AuthProvider = ({ children }) => {
       setTokenLoading(false);
     }
   }, []);
-  console.log("token is ", token);
 
   useEffect(() => {
     if (!token || tokenLoading) {
@@ -42,11 +42,39 @@ export const AuthProvider = ({ children }) => {
     getUserProfile();
   }, [token]);
 
+  useEffect(() => {
+    const getTotalUsers = async () => {
+      try {
+        const response = await fetchData("/api/user/get-total-users");
+        if (response?.responseCode === 200) {
+          setTotalUsers(response.data);
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    };
+    getTotalUsers();
+  }, []);
+
+  const logout = () => {
+    try {
+      localStorage.removeItem("habitToken");
+      setToken(null);
+      setUserDetails(null);
+      toast.success("Logged out successfully");
+    } catch (error) {
+      toast.error("Logout failed");
+    }
+  };
+
   const value = {
     token,
+    setToken,
     userDetails,
     profileLoading,
     isAuthenticated: !!token,
+    logout,
+    totalUsers,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

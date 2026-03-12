@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./Signin.css";
 import { EmailIcon, LockIcon, EyeIcon, GoogleIcon } from "../../Helper/Icons";
 import { InputField } from "../../Helper/Helper";
@@ -6,6 +6,7 @@ import LoginLeftContent from "../LoginLeftContent/LoginLeftContent";
 import { useNavigate, NavLink } from "react-router-dom";
 import { postData } from "../../api/apiService";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../context/AuthContext";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Signin = () => {
   const [errors, setErrors] = useState({});
   const [showPw, setShowPw] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+  const { setToken,  } = useContext(AuthContext);
   const update = (field) => (e) => {
     setForm((f) => ({ ...f, [field]: e.target.value }));
     setErrors((err) => ({ ...err, [field]: "" }));
@@ -40,6 +41,7 @@ const Signin = () => {
       if (response?.responseCode === 200) {
         toast.success(response.message);
         localStorage.setItem("habitToken", response.data.token);
+        setToken(response.data.token);
         setSubmitted(true);
         setTimeout(() => {
           navigate("/");
@@ -50,6 +52,10 @@ const Signin = () => {
     } catch (error) {
       toast.error(error);
     }
+  };
+
+  const handleGoogleSignin = () => {
+    toast("Google signin is still in progress 🚧");
   };
 
   return (
@@ -125,7 +131,7 @@ const Signin = () => {
             <span>or</span>
           </div>
 
-          <button className="hf-btn-google">
+          <button className="hf-btn-google" onClick={handleGoogleSignin}>
             <GoogleIcon />
             Continue with Google
           </button>

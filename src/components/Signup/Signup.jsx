@@ -78,6 +78,10 @@ const Signup = () => {
 
   const strengthColor = getStrengthColor(pwScore);
 
+  const handleGoogleSignin = () => {
+    toast("Google signin is still in progress 🚧");
+  };
+
   return (
     <>
       <div className="hf-root">
@@ -200,7 +204,7 @@ const Signup = () => {
               <span>or</span>
             </div>
 
-            <button className="hf-btn-google">
+            <button className="hf-btn-google" onClick={handleGoogleSignin}>
               <GoogleIcon />
               Continue with Google
             </button>

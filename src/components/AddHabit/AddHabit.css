@@ -1,0 +1,218 @@
+/* ── Form card ────────────────────────────────────────────────────────────── */
+.habit-form {
+  max-width: 800px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 32px;
+  background: #0d1410;
+  border: 1px solid #1e2e28;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: ah-fadeUp 0.4s ease both;
+}
+
+@keyframes ah-fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.habit-form-header {
+  margin-bottom: 28px;
+}
+
+.habit-form h2 {
+  font-family: "Instrument Serif", serif;
+  font-size: 1.5rem;
+  color: #e8f0ec;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.habit-form-subtitle {
+  font-size: 0.8rem;
+  color: #6b8a78;
+}
+
+/* ── Field group ──────────────────────────────────────────────────────────── */
+.habit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 20px;
+}
+
+/* ── Label ────────────────────────────────────────────────────────────────── */
+.habit-label {
+  font-size: 0.72rem;
+  color: #6b8a78;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Text input ───────────────────────────────────────────────────────────── */
+.habit-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #111917;
+  border: 1px solid #1e2e28;
+  border-radius: 10px;
+  color: #e8f0ec;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.habit-input::placeholder { color: #3a5248; }
+
+.habit-input:focus {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 3px #4ade8020;
+}
+
+/* ── React-Select ─────────────────────────────────────────────────────────── */
+.habit-react-select { font-family: "DM Sans", sans-serif; font-size: 0.88rem; }
+
+.habit-react-select .select__control {
+  background: #111917;
+  border: 1px solid #1e2e28;
+  border-radius: 10px;
+  min-height: 44px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.habit-react-select .select__control:hover {
+  border-color: #2a4438;
+}
+
+.habit-react-select .select__control--is-focused {
+  border-color: #4ade80 !important;
+  box-shadow: 0 0 0 3px #4ade8020 !important;
+}
+
+.habit-react-select .select__placeholder { color: #3a5248; }
+.habit-react-select .select__input-container { color: #e8f0ec; }
+.habit-react-select .select__single-value { color: #e8f0ec; }
+
+/* Tags */
+.habit-react-select .select__multi-value {
+  background: #4ade8020;
+  border: 1px solid #4ade8035;
+  border-radius: 6px;
+}
+
+.habit-react-select .select__multi-value__label {
+  color: #4ade80;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+}
+
+.habit-react-select .select__multi-value__remove {
+  color: #4ade8080;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.habit-react-select .select__multi-value__remove:hover {
+  background: #4ade8025;
+  color: #4ade80;
+}
+
+/* Dropdown */
+.habit-react-select .select__menu {
+  background: #111917;
+  border: 1px solid #1e2e28;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  margin-top: 6px;
+}
+
+.habit-react-select .select__menu-list {
+  padding: 4px;
+}
+
+.habit-react-select .select__option {
+  background: transparent;
+  color: #8ab09a;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.habit-react-select .select__option--is-focused {
+  background: #1e2e28;
+  color: #e8f0ec;
+}
+
+.habit-react-select .select__option--is-selected {
+  background: #4ade8018;
+  color: #4ade80;
+}
+
+.habit-react-select .select__option--is-selected:hover {
+  background: #4ade8025;
+}
+
+.habit-react-select .select__indicator-separator { background: #1e2e28; }
+.habit-react-select .select__dropdown-indicator { color: #3a5248; }
+.habit-react-select .select__dropdown-indicator:hover { color: #6b8a78; }
+.habit-react-select .select__clear-indicator { color: #3a5248; }
+.habit-react-select .select__clear-indicator:hover { color: #f87171; }
+
+/* ── Selected preview ─────────────────────────────────────────────────────── */
+.habit-preview {
+  font-size: 0.78rem;
+  color: #6b8a78;
+  padding: 9px 13px;
+  background: #111917;
+  border: 1px solid #1e2e28;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.habit-preview span { color: #4ade80; font-weight: 500; }
+
+/* ── Submit button ────────────────────────────────────────────────────────── */
+.habit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #4ade80;
+  color: #0b0f0e;
+  border: none;
+  border-radius: 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.habit-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+}
+
+.habit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px #4ade8038;
+}
+
+.habit-btn:active { transform: translateY(0); }
+
+@media (max-width: 600px) {
+  .habit-form { padding: 22px 18px; margin: 24px auto; }
+}

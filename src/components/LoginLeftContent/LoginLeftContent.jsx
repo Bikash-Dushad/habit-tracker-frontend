@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./LoginLeftContent.css";
 import { LogoIcon } from "../../Helper/Icons";
+import { AuthContext } from "../../context/AuthContext";
 const DOTS = [true, true, true, true, true, true, true];
 
 const LoginLeftContent = () => {
+  const { totalUsers } = useContext(AuthContext);
   return (
     <div className="hf-left">
       <div className="hf-logo">
@@ -39,7 +41,7 @@ const LoginLeftContent = () => {
         </div>
       </div>
 
-      <div className="hf-trusted">Trusted by 12,000+ habit builders</div>
+      <div className="hf-trusted">Trusted by {totalUsers} habit builders</div>
     </div>
   );
 };

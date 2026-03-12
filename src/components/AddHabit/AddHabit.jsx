@@ -1,70 +1,118 @@
-import React, { useEffect, useState, useContext } from "react";
-import { fetchData } from "../../api/apiService";
+import { useEffect, useState, useMemo } from "react";
+import { fetchData, postData } from "../../api/apiService";
 import toast from "react-hot-toast";
+import Select from "react-select";
+import "./AddHabit.css";
 
-const AddHabit = () => {
+const AddHabit = ({ onHabitAdded, isAuthenticated }) => {
   const [offDays, setOffDays] = useState([]);
   const [selectedOffDays, setSelectedOffDays] = useState([]);
   const [habitName, setHabitName] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loadingOffDays, setLoadingOffDays] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const options = useMemo(
+    () => offDays.map((day) => ({ value: day, label: day })),
+    [offDays],
+  );
 
   useEffect(() => {
     const getOffDays = async () => {
       try {
         const response = await fetchData("api/user/list-of-off-days-dropdown");
-        if (response?.responseCode === 200) {
-          setOffDays(response.data);
-        }
+        if (response?.responseCode === 200) setOffDays(response.data);
       } catch (error) {
         toast.error(error.message);
       } finally {
-        setLoading(false);
+        setLoadingOffDays(false);
       }
     };
     getOffDays();
   }, []);
 
-  const handleChange = (e) => {
-    const values = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value,
+  const handleChange = (selectedOptions) => {
+    setSelectedOffDays(
+      selectedOptions ? selectedOptions.map((o) => o.value) : [],
     );
-    setSelectedOffDays(values);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      toast.error("Please signin or signup first to add a habit.");
+      return;
+    }
 
-    const payload = {
-      name: habitName,
-      offDays: selectedOffDays,
-    };
+    if (!habitName.trim()) {
+      toast.error("Please enter a habit name");
+      return;
+    }
+    const payload = { name: habitName.trim(), offDays: selectedOffDays };
     console.log("Submitting:", payload);
-    // Here you will call API to create habit
+    try {
+      setSubmitting(true);
+      const response = await postData("/api/user/create-habit", payload);
+      console.log(response);
+      if (response?.responseCode === 200) {
+        toast.success("Habit added successfully");
+        setHabitName("");
+        setSelectedOffDays([]);
+        onHabitAdded();
+      } else {
+        toast.error(response?.message || "Failed to add habit");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <form action="">
-      <h2>Add Habit</h2>
-      <input
-        type="text"
-        placeholder="Enter habit name"
-        value={habitName}
-        onChange={(e) => setHabitName(e.target.value)}
-      />
-      <label>Select Off Days:</label>
-      <select multiple value={selectedOffDays} onChange={handleChange}>
-        {offDays || !loading
-          ? offDays.map((day, index) => (
-              <option key={index} value={day}>
-                {day}
-              </option>
-            ))
-          : ""}
-      </select>
+    <form className="habit-form" onSubmit={handleSubmit}>
+      <div className="habit-form-header">
+        <h2>Add Habit</h2>
+        <p className="habit-form-subtitle">Track a new habit starting today</p>
+      </div>
 
-      <p>Selected Off Days: {JSON.stringify(selectedOffDays)}</p>
-      <button type="submit">Add Habit</button>
+      <div className="habit-field">
+        <label className="habit-label">Habit Name</label>
+        <input
+          className="habit-input"
+          type="text"
+          placeholder="e.g. Morning run, Read 20 pages..."
+          value={habitName}
+          onChange={(e) => setHabitName(e.target.value)}
+        />
+      </div>
+
+      <div className="habit-field">
+        <label className="habit-label">Off Days</label>
+        {!loadingOffDays && (
+          <Select
+            className="habit-react-select"
+            classNamePrefix="select"
+            options={options}
+            isMulti
+            onChange={handleChange}
+            placeholder="Select days you'll skip..."
+            noOptionsMessage={() => "No days available"}
+            value={options.filter((opt) => selectedOffDays.includes(opt.value))}
+          />
+        )}
+      </div>
+
+      <p className="habit-preview">
+        Selected off days:{" "}
+        <span>
+          {selectedOffDays.length ? selectedOffDays.join(", ") : "None"}
+        </span>
+      </p>
+
+      <button className="habit-btn" type="submit" disabled={submitting}>
+        {submitting ? "Adding..." : "Add Habit →"}
+      </button>
     </form>
   );
 };
