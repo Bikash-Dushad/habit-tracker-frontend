@@ -412,6 +412,36 @@
   text-decoration: underline;
 }
 
+/* Profile Image Upload Field */
+.hf-field input[type="file"] {
+  border: 1px solid #1e2e28;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #111917;
+  color: #e8f0ec;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.hf-field input[type="file"]:hover {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 2px #22c55e30;
+}
+
+/* Uploaded Image Preview */
+.hf-profile-preview {
+  margin-top: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #4ade80;
+  box-shadow: 0 0 10px #4ade8060;
+}
+
 @keyframes hf-float {
   0%,
   100% {

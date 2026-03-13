@@ -15,7 +15,8 @@ import {
   getStrengthColor,
 } from "../../Helper/Helper";
 import LoginLeftContent from "../LoginLeftContent/LoginLeftContent";
-import { postData } from "../../api/apiService";
+import { fetchData, postData } from "../../api/apiService";
+import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -24,12 +25,14 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    avatar: "",
   });
   const [errors, setErrors] = useState({});
   const [showPw, setShowPw] = useState(false);
   const [showConfirmPw, setShowConfirmPw] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [pwScore, setPwScore] = useState(0);
+  const [imageUploading, setImageUploading] = useState(false);
 
   const update = (field) => (e) => {
     setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -80,6 +83,38 @@ const Signup = () => {
 
   const handleGoogleSignin = () => {
     toast("Google signin is still in progress 🚧");
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      setImageUploading(true);
+      const response = await axios.post(
+        "https://full-stack-habit-tracker.onrender.com/api/user/image-upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      if (response?.data.responseCode === 200) {
+        setForm((f) => ({ ...f, avatar: response.data.data }));
+        toast.success("Image uploaded successfully!");
+      } else {
+        toast.error(response.message || "Image upload failed");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message || "Image upload error");
+    } finally {
+      setImageUploading(false);
+    }
   };
 
   return (
@@ -189,6 +224,24 @@ const Signup = () => {
                 </div>
                 {errors.confirmPassword && (
                   <span className="hf-error-msg">{errors.confirmPassword}</span>
+                )}
+              </div>
+
+              <div className="hf-field" style={{ animationDelay: "0.35s" }}>
+                <label htmlFor="profileImage">Profile Image</label>
+                <input
+                  id="profileImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+                {imageUploading && <p>Uploading image...</p>}
+                {form.avatar && (
+                  <img
+                    src={form.avatar}
+                    alt="Profile"
+                    className="hf-profile-preview"
+                  />
                 )}
               </div>
 

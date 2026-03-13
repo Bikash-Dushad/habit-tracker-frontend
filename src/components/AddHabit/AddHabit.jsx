@@ -48,11 +48,9 @@ const AddHabit = ({ onHabitAdded, isAuthenticated }) => {
       return;
     }
     const payload = { name: habitName.trim(), offDays: selectedOffDays };
-    console.log("Submitting:", payload);
     try {
       setSubmitting(true);
       const response = await postData("/api/user/create-habit", payload);
-      console.log(response);
       if (response?.responseCode === 200) {
         toast.success("Habit added successfully");
         setHabitName("");
@@ -62,7 +60,6 @@ const AddHabit = ({ onHabitAdded, isAuthenticated }) => {
         toast.error(response?.message || "Failed to add habit");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error.message);
     } finally {
       setSubmitting(false);
@@ -76,31 +73,41 @@ const AddHabit = ({ onHabitAdded, isAuthenticated }) => {
         <p className="habit-form-subtitle">Track a new habit starting today</p>
       </div>
 
-      <div className="habit-field">
-        <label className="habit-label">Habit Name</label>
-        <input
-          className="habit-input"
-          type="text"
-          placeholder="e.g. Morning run, Read 20 pages..."
-          value={habitName}
-          onChange={(e) => setHabitName(e.target.value)}
-        />
-      </div>
-
-      <div className="habit-field">
-        <label className="habit-label">Off Days</label>
-        {!loadingOffDays && (
-          <Select
-            className="habit-react-select"
-            classNamePrefix="select"
-            options={options}
-            isMulti
-            onChange={handleChange}
-            placeholder="Select days you'll skip..."
-            noOptionsMessage={() => "No days available"}
-            value={options.filter((opt) => selectedOffDays.includes(opt.value))}
+      <div className="habit-fields-row">
+        <div className="habit-field">
+          <label className="habit-label">Habit Name</label>
+          <input
+            className="habit-input"
+            type="text"
+            placeholder="e.g. Morning run, Read 20 pages..."
+            value={habitName}
+            onChange={(e) => setHabitName(e.target.value)}
+            disabled={submitting}
           />
-        )}
+        </div>
+
+        <div className="habit-field">
+          <label className="habit-label">Off Days</label>
+          {!loadingOffDays ? (
+            <Select
+              className="habit-react-select"
+              classNamePrefix="select"
+              options={options}
+              isMulti
+              onChange={handleChange}
+              placeholder="Select days you'll skip..."
+              noOptionsMessage={() => "No days available"}
+              value={options.filter((opt) =>
+                selectedOffDays.includes(opt.value),
+              )}
+              isDisabled={submitting}
+            />
+          ) : (
+            <div className="habit-input" style={{ color: "#3a5248" }}>
+              Loading...
+            </div>
+          )}
+        </div>
       </div>
 
       <p className="habit-preview">
