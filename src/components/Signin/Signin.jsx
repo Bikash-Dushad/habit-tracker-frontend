@@ -137,11 +137,9 @@ const Signin = () => {
               onSuccess={async (credentialResponse) => {
                 try {
                   const token = credentialResponse.credential;
-                  console.log("token is", token);
                   const response = await postData("/api/OAuth/google-auth", {
                     credential: token,
                   });
-                  console.log("response is ", response);
 
                   if (response?.responseCode === 200) {
                     toast.success(response.message);
