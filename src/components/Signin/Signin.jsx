@@ -7,6 +7,11 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { postData } from "../../api/apiService";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
+
+// Add this at the top of your Signin component temporarily
+console.log("Current origin:", window.location.origin);
+console.log("Current href:", window.location.href);
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -14,7 +19,7 @@ const Signin = () => {
   const [errors, setErrors] = useState({});
   const [showPw, setShowPw] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const { setToken,  } = useContext(AuthContext);
+  const { setToken } = useContext(AuthContext);
   const update = (field) => (e) => {
     setForm((f) => ({ ...f, [field]: e.target.value }));
     setErrors((err) => ({ ...err, [field]: "" }));
@@ -52,10 +57,6 @@ const Signin = () => {
     } catch (error) {
       toast.error(error);
     }
-  };
-
-  const handleGoogleSignin = () => {
-    toast("Google signin is still in progress 🚧");
   };
 
   return (
@@ -131,10 +132,36 @@ const Signin = () => {
             <span>or</span>
           </div>
 
-          <button className="hf-btn-google" onClick={handleGoogleSignin}>
-            <GoogleIcon />
-            Continue with Google
-          </button>
+          <div className="hf-btn-google">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                try {
+                  const token = credentialResponse.credential;
+                  console.log("token is", token);
+                  const response = await postData("/api/OAuth/google-auth", {
+                    credential: token,
+                  });
+                  console.log("response is ", response);
+
+                  if (response?.responseCode === 200) {
+                    toast.success(response.message);
+
+                    localStorage.setItem("habitToken", response.data.token);
+                    setToken(response.data.token);
+
+                    navigate("/");
+                  } else {
+                    toast.error(response.message);
+                  }
+                } catch (error) {
+                  toast.error("Google login failed");
+                }
+              }}
+              onError={() => {
+                toast.error("Google login failed");
+              }}
+            />
+          </div>
 
           <p className="hf-signin-link">
             Don't have an account? <NavLink to="/signup">Sign up</NavLink>
