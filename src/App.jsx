@@ -6,6 +6,7 @@ import SignupPage from "./pages/SignupPage";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -15,6 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+
         <Route
           path="/signin"
           element={

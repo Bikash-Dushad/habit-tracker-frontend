@@ -5,7 +5,7 @@ import "./Navbar.css";
 
 const Navbar = ({ isAuthenticated, userDetails, logout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 600) setDrawerOpen(false);
@@ -31,15 +31,7 @@ const Navbar = ({ isAuthenticated, userDetails, logout }) => {
           </Link>
         </li>
         <li>
-          <Link
-            to="/profile"
-            onClick={(e) => {
-              handleProfileClick(e);
-              onClick?.();
-            }}
-          >
-            Profile
-          </Link>
+          <Link to="/profile">Profile</Link>
         </li>
         <li>
           <Link
