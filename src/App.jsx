@@ -5,6 +5,7 @@ import SigninPage from "./pages/SigninPage";
 import SignupPage from "./pages/SignupPage";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   const { isAuthenticated } = useContext(AuthContext);
@@ -13,6 +14,7 @@ function App() {
       <Toaster />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route
           path="/signin"
           element={

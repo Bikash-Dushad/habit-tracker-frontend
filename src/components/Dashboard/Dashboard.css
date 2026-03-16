@@ -1,0 +1,162 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap");
+
+.db-section {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  font-family: "DM Sans", sans-serif;
+  padding-bottom: 60px;
+}
+
+.db-heading {
+  font-family: "Instrument Serif", serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #e8f0ec;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.db-msg {
+  color: #6b8a78;
+  font-size: 0.88rem;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* ── One block per habit ──────────────────────────────────────────────────── */
+.db-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.db-habit-block {
+  background: #0d1410;
+  border: 1px solid #1e2e28;
+  border-radius: 14px;
+  padding: 20px 24px;
+  transition: border-color 0.2s;
+}
+
+.db-habit-block:hover { border-color: #2a4438; }
+
+.db-habit-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #e8f0ec;
+  margin-bottom: 16px;
+}
+
+/* ── Row of month cards ───────────────────────────────────────────────────── */
+.db-month-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Single month card ────────────────────────────────────────────────────── */
+.db-month-card {
+  background: #111917;
+  border: 1px solid #1e2e28;
+  border-radius: 12px;
+  padding: 14px 16px 16px;
+  width: 180px;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.db-month-card:hover {
+  border-color: #2a4438;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.db-month-label {
+  font-size: 0.7rem;
+  color: #6b8a78;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+  align-self: flex-start;
+}
+
+/* ── Pie center % overlay ─────────────────────────────────────────────────── */
+.db-pie-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -14%);
+  pointer-events: none;
+  text-align: center;
+}
+
+.db-rate {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4ade80;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* ── Stats row ────────────────────────────────────────────────────────────── */
+.db-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.db-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.db-stat-val {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #8ab09a;
+}
+
+.db-stat-val.completed { color: #4ade80; }
+.db-stat-val.streak    { color: #fb923c; }
+
+.db-stat-key {
+  font-size: 0.6rem;
+  color: #3a5248;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.db-stat-divider {
+  width: 1px;
+  height: 24px;
+  background: #1e2e28;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────────────── */
+.db-tooltip {
+  background: #0f1a14;
+  border: 1px solid #1e2e28;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.78rem;
+  color: #6b8a78;
+}
+
+.db-tooltip span { color: #4ade80; font-weight: 500; }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .db-habit-block { padding: 16px; }
+  .db-month-card  { width: 150px; }
+  .db-rate        { font-size: 0.88rem; }
+}

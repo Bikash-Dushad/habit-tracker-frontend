@@ -26,6 +26,11 @@ const Navbar = ({ isAuthenticated, userDetails, logout }) => {
     isAuthenticated ? (
       <>
         <li>
+          <Link to="/dashboard" onClick={onClick}>
+            Dashboard
+          </Link>
+        </li>
+        <li>
           <Link
             to="/profile"
             onClick={(e) => {
